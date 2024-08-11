@@ -1,0 +1,114 @@
+<div class="container mx-auto p-6 bg-black min-h-screen text-white">
+  <h1 class="text-3xl text-black font-bold mb-6 text-center">Gestión de Estudiantes</h1>
+
+  <!-- Barra de búsqueda -->
+  <div class="flex justify-center mb-4">
+    <input type="text" [(ngModel)]="searchTerm" (keydown)="filtrarEstudiantes($event)" class="w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline border border-[#2197a3] rounded-lg" placeholder="Buscar...">
+    <button (click)="filtrarEstudiantes()" class="bg-[#2197a3] hover:bg-[#1b7e85] text-white font-bold py-2 px-4 rounded-full flex items-center ml-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      Filtrar
+    </button>
+    <button (click)="limpiarFiltro()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full flex items-center ml-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m3-2.5a.5.5 0 11-.5.5v2.5a.5.5 0 01-.5.5m-3-.5a.5.5 0 11-.5-.5v-2.5a.5.5 0 01.5-.5z" />
+      </svg>
+      Limpiar
+    </button>
+  </div>
+  <!-- Formulario para crear/editar estudiantes -->
+  <form (submit)="guardarEstudiante()" class="mb-8 bg-gray-900 p-6 rounded-lg shadow-lg">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label class="block text-sm font-bold mb-2" for="nombre">Nombre</label>
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="estudianteActual.nombre"
+          name="nombre"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+          required
+          placeholder="Ingresa el nombre"
+        >
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2" for="apellido">Apellido</label>
+        <input
+          id="apellido"
+          type="text"
+          [(ngModel)]="estudianteActual.apellido"
+          name="apellido"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+          required
+          placeholder="Ingresa el apellido"
+        >
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2" for="edad">Edad</label>
+        <input
+          id="edad"
+          type="number"
+          [(ngModel)]="estudianteActual.edad"
+          name="edad"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+          required
+          placeholder="Ingresa la edad"
+        >
+      </div>
+      <div>
+        <label class="block text-sm font-bold mb-2" for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          [(ngModel)]="estudianteActual.email"
+          name="email"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-900 leading-tight focus:outline-none focus:shadow-outline"
+          required
+          placeholder="Ingresa el email"
+        >
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <button type="submit" class="bg-[#2197a3] hover:bg-[#1b7e85] text-white font-bold py-2 px-6 rounded">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+      <button type="button" (click)="resetForm()" *ngIf="isEditMode" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded ml-2">
+        Cancelar
+      </button>
+    </div>
+  </form>
+
+  <!-- Tabla de estudiantes -->
+  <div class="overflow-x-auto">
+    <table class="table-auto w-full bg-gray-900 rounded-lg shadow-lg">
+      <thead>
+        <tr class="bg-[#2197a3]">
+          <th class="px-4 py-2">Nombre</th>
+          <th class="px-4 py-2">Apellido</th>
+          <th class="px-4 py-2">Edad</th>
+          <th class="px-4 py-2">Email</th>
+          <th class="px-4 py-2">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let estudiante of filteredEstudiantes" class="border-b border-gray-700">
+          <td class="px-4 py-2">{{ estudiante.nombre }}</td>
+          <td class="px-4 py-2">{{ estudiante.apellido }}</td>
+          <td class="px-4 py-2">{{ estudiante.edad }}</td>
+          <td class="px-4 py-2">{{ estudiante.email }}</td>
+          <td class="px-4 py-2 flex">
+            <button (click)="editarEstudiante(estudiante)" class="bg-[#2197a3] hover:bg-[#1b7e85] text-white font-bold py-2 px-3 mr-1 rounded-full flex items-center">
+              <img src="../../assets/editar.png" alt="icono de editar" class="h-5 w-5 mr-1">
+              Editar
+            </button>
+            <button (click)="eliminarEstudiante(estudiante.id)" class="bg-[#2197a3] hover:bg-[#1b7e85] text-white font-bold py-2 px-3 mr-1 rounded-full flex items-center">
+              <img src="../../assets/eliminar.png" alt="icono de eliminar" class="h-5 w-5 mr-1">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
