@@ -20,6 +20,16 @@ Un proyecto de un CRUD de gestion de estudiantes el cual hace las operaciones ba
 Dirígete al directorio del backend y asegúrate de que el servidor Express esté configurado correctamente.
 Crea un archivo .env para las variables de entorno y agrega los detalles de conexión a la base de datos.
 
+## Importar la Base de Datos
+
+Para importar la base de datos en MySQL Workbench:
+
+1. Abre MySQL Workbench y conéctate a tu servidor.
+2. Ve a `Server` > `Data Import`.
+3. Selecciona la opción **"Import from Self-Contained File"** y elige el archivo `nombre_de_tu_archivo.sql`.
+4. En la sección "Default Schema to be Imported To", selecciona o crea la base de datos en la que deseas importar los datos.
+5. Haz clic en **"Start Import"**.
+
 # Ejecuta el proyecto:
 Backend: Inicia el servidor Express con:
     node server.js
